@@ -11,12 +11,19 @@ namespace KSPSim
   {
     public void toggle()
     {
-      print(">>> here <<<");
+      // TODO: When leaving flight mode - revert back to normal launch site.
+      // TODO: We also need to revert the launch site name if the launch fails (e.g. nothing in the editor)
+      print(">>>>" + EditorLogic.fetch.launchSiteName);
+
+      // Configure the simulation
+
+      //EditorLogic.fetch.launchSiteName = "SimulationLaunchSite";
+      EditorLogic.fetch.launchVessel();
     }
 
     ApplicationLauncherButton alButton;
 
-    public void Update()
+    public void Start()
     {
       if (ApplicationLauncher.Ready && alButton == null)
       {
@@ -28,6 +35,8 @@ namespace KSPSim
           ApplicationLauncher.AppScenes.ALWAYS,
           buttonTexture);
       }
+
+      // TODO: Remove/hide the app button when leaving the editor (OnEnable/Disable?)
 
     }
 
