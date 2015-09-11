@@ -15,6 +15,19 @@ namespace KSPSim
       // TODO: We also need to revert the launch site name if the launch fails (e.g. nothing in the editor)
       print(">>>>" + EditorLogic.fetch.launchSiteName);
 
+      // could try:
+      //SpaceTracking.GoToAndFocusVessel(v);
+
+      // or
+      //FlightDriver.StartWithNewLaunch(string fullFilePath, string missionFlagURL, string launchSiteName, VesselCrewManifest manifest);
+
+      // or even: and we can store the previous state so that we can revert easily
+      //FlightDriver.StartAndFocusVessel(Game stateToLoad, int vesselToFocusIdx);
+      // See also all the other stuff in there, looks prime for it! Maybe even hack CanRevert via reflection for hardcore modes?
+
+
+
+
 #if false
       // need a game object with a transform called "SimulationLaunchSite_Spawn"
 
