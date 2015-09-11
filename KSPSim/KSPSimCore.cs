@@ -15,6 +15,46 @@ namespace KSPSim
       // TODO: We also need to revert the launch site name if the launch fails (e.g. nothing in the editor)
       print(">>>>" + EditorLogic.fetch.launchSiteName);
 
+#if false
+      // need a game object with a transform called "SimulationLaunchSite_Spawn"
+
+      GameObject go = new GameObject("go");
+
+      PSystemSetup.SpaceCenterFacility newFacility = new PSystemSetup.SpaceCenterFacility();
+      newFacility.name = "SimulationLaunchSite";
+      newFacility.facilityName = "SimulationLaunchSite";
+      newFacility.facilityPQS = ((CelestialBody)obj.getSetting("CelestialBody")).pqsController;
+      newFacility.facilityTransformName = "SimulationLaunchSiteXForm";
+      newFacility.pqsName = ((CelestialBody)obj.getSetting("CelestialBody")).pqsController.name;
+      PSystemSetup.SpaceCenterFacility.SpawnPoint spawnPoint = new PSystemSetup.SpaceCenterFacility.SpawnPoint();
+      spawnPoint.name = "SimulationLaunchSite";
+      spawnPoint.spawnTransformURL = "SimulationLaunchSite_Spawn";
+      newFacility.spawnPoints = new PSystemSetup.SpaceCenterFacility.SpawnPoint[1];
+      newFacility.spawnPoints[0] = spawnPoint;
+
+      // Find and hack the array of facilities via reflection
+      foreach (FieldInfo fi in PSystemSetup.Instance.GetType().GetFields(BindingFlags.NonPublic | BindingFlags.Instance))
+			{
+				if (fi.FieldType.Name == "SpaceCenterFacility[]")
+        {
+          // Make a copy of the existing facilities array and append another entry at the end.
+          PSystemSetup.SpaceCenterFacility[] facilities = (PSystemSetup.SpaceCenterFacility[])fi.GetValue(PSystemSetup.Instance);
+          facilities.AddUnique(newFacility);
+          /*
+          PSystemSetup.SpaceCenterFacility[] newFacilities = new PSystemSetup.SpaceCenterFacility[facilities.Length + 1];
+          for (int i = 0; i < facilities.Length; ++i)
+          {
+            newFacilities[i] = facilities[i];
+          }
+          newFacilities[newFacilities.Length - 1] = newFacility;
+          fi.SetValue(PSystemSetup.Instance, newFacilities);
+          facilities = newFacilities;
+          */
+        }
+      }
+#endif
+  
+
       // Configure the simulation
 
       //EditorLogic.fetch.launchSiteName = "SimulationLaunchSite";
