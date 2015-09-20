@@ -47,8 +47,8 @@ namespace KSPSim
 
       // Find and hack the array of facilities via reflection
       foreach (FieldInfo fi in PSystemSetup.Instance.GetType().GetFields(BindingFlags.NonPublic | BindingFlags.Instance))
-			{
-				if (fi.FieldType.Name == "SpaceCenterFacility[]")
+      {
+        if (fi.FieldType.Name == "SpaceCenterFacility[]")
         {
           // Make a copy of the existing facilities array and append another entry at the end.
           PSystemSetup.SpaceCenterFacility[] facilities = (PSystemSetup.SpaceCenterFacility[])fi.GetValue(PSystemSetup.Instance);
@@ -70,8 +70,9 @@ namespace KSPSim
 
       // Configure the simulation
 
-      //EditorLogic.fetch.launchSiteName = "SimulationLaunchSite";
+      EditorLogic.fetch.launchSiteName = "KSPSim_LaunchSite";
       EditorLogic.fetch.launchVessel();
+      //SpaceTracking.GoToAndFocusVessel(FlightGlobals.fetch.activeVessel);
     }
 
     ApplicationLauncherButton alButton;
@@ -91,6 +92,24 @@ namespace KSPSim
 
       // TODO: Remove/hide the app button when leaving the editor (OnEnable/Disable?)
 
+    }
+
+            /// <summary>
+        /// Called when script instance is being loaded.
+        /// </summary>
+    public void Awake()
+    {
+      GameEvents.onLaunch.Add(FailureStartHandler);
+    }
+
+    /// <summary>
+    /// 
+    /// </summary>
+    /// <param name="eventReport">Event Report from action.</param>
+    private void FailureStartHandler(EventReport eventReport)
+    {
+      print(">>>> focussing now!");
+      SpaceTracking.GoToAndFocusVessel(FlightGlobals.fetch.activeVessel);
     }
 
   }
